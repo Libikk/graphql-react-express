@@ -15,20 +15,28 @@ app.use("/test", (req, res, next) => {
 });
 
 const schema = buildSchema(`
-type Test {
-  hello: String!
+type Food {
+  id: Int!
+  dataType: String!
+  publishedDate: String!
+  description: String!
+  foodCategory: String!
+}
+
+type SearchFoods {
+  foods: [Food]
   totalPages: Int!
   currentPage: Int!
 }
 
 type Query {
-  test: Test
+  searchFoods: SearchFoods
 }
 `);
 
 // The root provides a resolver function for each API endpoint
 const root = {
-  test: async () => {
+  searchFoods: async () => {
     try {
       const body = {"query": "Cheddar cheese", "dataType": ["Branded"], "sortBy": "fdcId", "sortOrder": "desc"}
       const options = {
@@ -41,10 +49,18 @@ const root = {
 
       const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${API_KEY}`, options);
       const data = await response.json();
+      // console.log('data: ', data);
       return {
         totalPages: data.totalPages,
         currentPage: data.currentPage,
-        hello: 'adsdasd'
+        foods: data.foods.map(e => ({
+          // add adapter
+          id: e.fdcId,
+          dataType: e.dataType,
+          publishedDate: new Date(e.publishedDate).toISOString(),
+          description: e.description,
+          foodCategory: e.foodCategory,
+        }))
       }
     } catch (err) {
       console.log('🚀 ~ file: server.js ~ line 32 ~ hello: ~ err', err);
