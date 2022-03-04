@@ -20,6 +20,8 @@ type Food {
   dataType: String!
   publishedDate: String!
   description: String!
+  marketCountry: String!
+  brandName: String!
   foodCategory: String!
 }
 
@@ -29,16 +31,39 @@ type SearchFoods {
   currentPage: Int!
 }
 
+enum SortDirectionEnum {
+  ASC
+  DESC
+}
+
+enum SortFieldEnum {
+  dataType
+  description
+  publishedDate
+  id
+}
+
+input SortOrder {
+  field: SortFieldEnum
+  direction: SortDirectionEnum
+}
+
 type Query {
-  searchFoods: SearchFoods
+  searchFoods(sortOrder: SortOrder, query: String): SearchFoods
 }
 `);
+// todo docs mapping for SortFieldEnum
+// dataType.keyword
+// - lowercaseDescription.keyword
+// - fdcId
+// - publishedDate
 
 // The root provides a resolver function for each API endpoint
 const root = {
-  searchFoods: async () => {
+  searchFoods: async (arg) => {
+    console.log('arg: ', arg);
     try {
-      const body = {"query": "Cheddar cheese", "dataType": ["Branded"], "sortBy": "fdcId", "sortOrder": "desc"}
+      const body = {"query": arg.query, "dataType": ["Branded"], "sortBy": "fdcId", "sortOrder": "desc"}
       const options = {
         method: 'POST',
         headers: {
@@ -60,6 +85,8 @@ const root = {
           publishedDate: new Date(e.publishedDate).toISOString(),
           description: e.description,
           foodCategory: e.foodCategory,
+          brandName: e.brandName,
+          marketCountry: e.marketCountry
         }))
       }
     } catch (err) {
