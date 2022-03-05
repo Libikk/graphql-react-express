@@ -20,8 +20,8 @@ type Food {
   dataType: String!
   publishedDate: String!
   description: String!
-  marketCountry: String!
-  brandName: String
+  marketCountry: String
+  brandOwner: String
   foodCategory: String!
 }
 
@@ -43,13 +43,25 @@ enum SortFieldEnum {
   id
 }
 
+enum DataTypeFilterEnum {
+  Branded
+  Foundation
+  Survey
+  SRLegacy
+}
+
 input SortOrder {
   field: SortFieldEnum
   direction: SortDirectionEnum
 }
 
+input Filters {
+  dataType: [DataTypeFilterEnum]
+  brandOwner: [String]
+}
+
 type Query {
-  searchFoods(sortOrder: SortOrder, query: String): SearchFoods
+  searchFoods(sortOrder: SortOrder, query: String, filters: Filters): SearchFoods
 }
 `);
 
@@ -69,12 +81,30 @@ const root = {
     }
 
     const sortData = {
-      "sortBy": sortFieldEnumMapping[arg.sortOrder?.field] || 'fdcId',
-      "sortOrder": sortDirectionEnumMapping[arg.sortOrder?.direction] || 'asc'
+      "sortBy": sortFieldEnumMapping[arg.sortOrder?.field],
+      "sortOrder": sortDirectionEnumMapping[arg.sortOrder?.direction]
+    }
+
+    const dataTypeEnumMapping = {
+      Branded: 'Branded',
+      Foundation: 'Foundation',
+      Survey: 'Survey (FNDDS)',
+      SRLegacy: 'SR Legacy',
+    }
+
+    const filters = {
+      dataType: arg.filters?.dataType?.map(filterValue => dataTypeEnumMapping[filterValue]) || [],
+      brandOwner: arg.filters.brandOwner[0] || ''
     }
 
     try {
-      const body = {"query": arg.query, "dataType": ["Branded"], ...sortData }
+      const body = {
+        "query": arg.query,
+        ...filters,
+        ...sortData,
+      }
+      console.log('🚀 ~ file: server.js ~ line 105 ~ searchFoods: ~ body', body);
+
       const options = {
         method: 'POST',
         headers: {
@@ -85,7 +115,8 @@ const root = {
 
       const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${API_KEY}`, options);
       const data = await response.json();
-      console.log('data: ', data);
+
+
       return {
         totalPages: data.totalPages,
         currentPage: data.currentPage,
@@ -96,7 +127,7 @@ const root = {
           publishedDate: new Date(e.publishedDate).toISOString(),
           description: e.description,
           foodCategory: e.foodCategory,
-          brandName: e.brandName,
+          brandOwner: e.brandOwner,
           marketCountry: e.marketCountry
         }))
       }
