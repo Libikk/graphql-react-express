@@ -21,7 +21,7 @@ type Food {
   publishedDate: String!
   description: String!
   marketCountry: String!
-  brandName: String!
+  brandName: String
   foodCategory: String!
 }
 
@@ -53,7 +53,7 @@ type Query {
 }
 `);
 // todo docs mapping for SortFieldEnum
-// dataType.keyword
+// - dataType.keyword
 // - lowercaseDescription.keyword
 // - fdcId
 // - publishedDate
@@ -61,9 +61,26 @@ type Query {
 // The root provides a resolver function for each API endpoint
 const root = {
   searchFoods: async (arg) => {
-    console.log('arg: ', arg);
+
+    const sortFieldEnumMapping = {
+      dataType: 'dataType.keyword',
+      description: 'lowercaseDescription.keyword',
+      publishedDate: 'publishedDate',
+      id: 'fdcId',
+    }
+
+    const sortDirectionEnumMapping = {
+      'ASC': 'asc',
+      'DESC': 'desc'
+    }
+
+    const sortData = {
+      "sortBy": sortFieldEnumMapping[arg.sortOrder?.field] || 'fdcId',
+      "sortOrder": sortDirectionEnumMapping[arg.sortOrder?.direction] || 'asc'
+    }
+
     try {
-      const body = {"query": arg.query, "dataType": ["Branded"], "sortBy": "fdcId", "sortOrder": "desc"}
+      const body = {"query": arg.query, "dataType": ["Branded"], ...sortData }
       const options = {
         method: 'POST',
         headers: {
