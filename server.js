@@ -85,7 +85,7 @@ const root = {
 
       const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${API_KEY}`, options);
       const data = await response.json();
-      // console.log('data: ', data);
+      console.log('data: ', data);
       return {
         totalPages: data.totalPages,
         currentPage: data.currentPage,
@@ -101,9 +101,8 @@ const root = {
         }))
       }
     } catch (err) {
-      console.log('🚀 ~ file: server.js ~ line 32 ~ hello: ~ err', err);
+      console.error(err);
     }
-    return 'Hello world!';
   },
 };
 

@@ -33,29 +33,21 @@ export default function App() {
 
   return <div className='bg-gray-200'>
           <div className='p-20'>
-            <form className="mt-5 sm:flex sm:items-center px-10" onSubmit={(event) => event.preventDefault()}>
-              <div className="w-full sm:max-w-xs">
-                <label htmlFor="query" className="sr-only">
-                  Query
-                </label>
-                <input
-                  autoFocus
-                  type="query"
-                  name="query"
-                  id="query"
-                  value={queryInput}
-                  onChange={({ target }) => setQueryInput(target.value)}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md  px-4 py-2"
-                  placeholder="Type query"
-                  />
-              </div>
-              <button
-                type="submit"
-                className="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                >
-                Save
-              </button>
-            </form>
+            <div className="w-full sm:max-w-xs px-10">
+              <label htmlFor="query" className="sr-only">
+                Query
+              </label>
+              <input
+                autoFocus
+                type="query"
+                name="query"
+                id="query"
+                value={queryInput}
+                onChange={({ target }) => setQueryInput(target.value)}
+                className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md  px-4 py-2"
+                placeholder="Type food query"
+                />
+            </div>
             <div className="flex flex-col p-10">
               <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
