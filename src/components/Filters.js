@@ -5,10 +5,10 @@ const brandOwnerFilterConfig = {
   name: 'Brand Owner',
   options: [
     { value: 'nestle', label: 'Nestle' },
-    { value: 'coca-cola', label: 'Coca-Cola' },
+    { value: 'Whole Foods Market', label: 'Whole Foods Market' },
     { value: 'danone', label: 'Danone' },
     { value: 'pepsi', label: 'Pepsi' },
-    { value: 'McDonalds', label: 'McDonalds ' },
+    { value: 'Riviana Foods', label: 'Riviana Foods' },
     { value: 'FRESH & EASY', label: `FRESH & EASY` },
   ],
 }

@@ -17,12 +17,12 @@ app.use("/test", (req, res, next) => {
 const schema = buildSchema(`
 type Food {
   id: Int!
-  dataType: String!
-  publishedDate: String!
-  description: String!
+  dataType: String
+  publishedDate: String
+  description: String
   marketCountry: String
   brandOwner: String
-  foodCategory: String!
+  foodCategory: String
 }
 
 type SearchFoods {
