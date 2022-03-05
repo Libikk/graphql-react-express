@@ -57,7 +57,7 @@ input SortOrder {
 
 input Filters {
   dataType: [DataTypeFilterEnum]
-  brandOwner: [String]
+  brandOwner: String
 }
 
 type Query {
@@ -94,7 +94,7 @@ const root = {
 
     const filters = {
       dataType: arg.filters?.dataType?.map(filterValue => dataTypeEnumMapping[filterValue]) || [],
-      brandOwner: arg.filters.brandOwner[0] || ''
+      brandOwner: arg.filters.brandOwner
     }
 
     try {

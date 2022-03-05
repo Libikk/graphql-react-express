@@ -1,52 +1,62 @@
 import { useEffect, useState } from "react";
 
-const filters = [
-  {
-
-    // todo brandowner can only be singular value :<
-    key: 'brandOwner',
-    name: 'Brand Owner',
-    options: [
-      { value: 'nestle', label: 'Nestle' },
-      { value: 'coca-cola', label: 'Coca-Cola' },
-      { value: 'danone', label: 'Danone' },
-      { value: 'pepsi', label: 'Pepsi' },
-      { value: 'CHILI BEAK', label: 'CHILI BEAK' },
-      { value: 'Kar Nut Products Company', label: `Kar Nut Products Company` },
-    ],
-  },
-  {
-    key: 'dataType',
-    name: 'Data Type',
-    options: [
-      { value: 'Branded', label: 'Branded' },
-      { value: 'Foundation', label: 'Foundation' },
-      { value: 'Survey', label: 'Survey (FNDDS)' },
-      { value: 'SRLegacy', label: 'SR Legacy' },
-    ]
-  }
-]
+const brandOwnerFilterConfig = {
+  key: 'brandOwner',
+  name: 'Brand Owner',
+  options: [
+    { value: 'nestle', label: 'Nestle' },
+    { value: 'coca-cola', label: 'Coca-Cola' },
+    { value: 'danone', label: 'Danone' },
+    { value: 'pepsi', label: 'Pepsi' },
+    { value: 'CHILI BEAK', label: 'CHILI BEAK' },
+    { value: 'Kar Nut Products Company', label: `Kar Nut Products Company` },
+  ],
+}
+const dataTypeFilterConfig = {
+  key: 'dataType',
+  name: 'Data Type',
+  options: [
+    { value: 'Branded', label: 'Branded' },
+    { value: 'Foundation', label: 'Foundation' },
+    { value: 'Survey', label: 'Survey (FNDDS)' },
+    { value: 'SRLegacy', label: 'SR Legacy' },
+  ]
+}
+const filters = [brandOwnerFilterConfig, dataTypeFilterConfig]
 
 const Filters = ({ onFiltersChanged }) => {
-   const [activeFilters, setFilters] = useState([])
+   const [dataTypeFilters, setDataTypeFilter] = useState([]);
+   const [brandOwnerFilter, setBrandOwnerFilter] = useState(null);
 
-  const onChecked = (changedFilterValue) => {
-    const isActive = activeFilters.some(filter => changedFilterValue === filter);
-    if (isActive) setFilters(prevState => prevState.filter(filterVal => changedFilterValue !== filterVal))
-    else setFilters(prevState => [...prevState, changedFilterValue])
+  const onFilterChange = ({ filterKey, filterValue }) => {
+    switch(filterKey) {
+      case 'dataType':
+        const isActive = dataTypeFilters.includes(filterValue);
+        if (isActive) setDataTypeFilter(prevState => prevState.filter(filterVal => filterValue !== filterVal))
+        else setDataTypeFilter(prevState => [...prevState, filterValue])
+        break;
+
+        case 'brandOwner':
+          const isAlreadySet = brandOwnerFilter === filterValue;
+          if (isAlreadySet)  return setBrandOwnerFilter(null)
+          setBrandOwnerFilter(filterValue)
+        break;
+      default:
+        throw new Error('Invalid error')
+    }
+  }
+
+  const isChecked = ({ filterValue, filterKey }) => {
+    if (filterKey === 'dataType') return dataTypeFilters.includes(filterValue);
+    if (filterKey === 'brandOwner') return brandOwnerFilter === filterValue;
   }
 
   useEffect(() => {
-    const getKeyRelatedFilters = (filterKey) => {
-      const filterKeyOptions = filters.find(filter => filter.key === filterKey);
-      return filterKeyOptions.options.reduce((acc, filterOption) => activeFilters.includes(filterOption.value) ? [...acc, filterOption.value] : acc, [])
-    }
-
     onFiltersChanged({
-      dataType: getKeyRelatedFilters('dataType'),
-      brandOwner: getKeyRelatedFilters('brandOwner')
+      dataType: dataTypeFilterConfig.options.reduce((acc, filterOption) => dataTypeFilters.includes(filterOption.value) ? [...acc, filterOption.value] : acc, []),
+      brandOwner: brandOwnerFilter
     })
-  },[activeFilters])
+  }, [brandOwnerFilter, dataTypeFilters])
 
   return (
     <div className="bg-white">
@@ -68,8 +78,8 @@ const Filters = ({ onFiltersChanged }) => {
                               name={`${section.key}`}
                               defaultValue={option.value}
                               type="checkbox"
-                              checked={activeFilters.includes(option.value)}
-                              onChange={() => onChecked(option.value)}
+                              checked={isChecked({ filterKey: section.key, filterValue: option.value })}
+                              onChange={() => onFilterChange({ filterKey: section.key, filterValue: option.value })}
                               className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                             />
                             <label htmlFor={`${section.id}-${optionIdx}`} className="ml-3 text-sm text-gray-600">

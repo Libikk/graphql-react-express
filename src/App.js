@@ -23,13 +23,12 @@ export default function App() {
 
   const [queryInput, setQueryInput] = useState('')
   const [filters, setFilters] = useState({})
-  console.log('🚀 ~ file: App.js ~ line 30 ~ App ~ filters', filters);
 
   const { loading, error, data } = useQuery(SEARCH_FOOD_QUERY, { variables: { query: queryInput, filters } });
 
 
   // if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return <div className='bg-gray-200'>
           <div className='p-20 flex'>
