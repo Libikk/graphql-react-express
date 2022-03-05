@@ -52,13 +52,7 @@ type Query {
   searchFoods(sortOrder: SortOrder, query: String): SearchFoods
 }
 `);
-// todo docs mapping for SortFieldEnum
-// - dataType.keyword
-// - lowercaseDescription.keyword
-// - fdcId
-// - publishedDate
 
-// The root provides a resolver function for each API endpoint
 const root = {
   searchFoods: async (arg) => {
 
