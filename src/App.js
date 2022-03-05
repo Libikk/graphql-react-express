@@ -24,9 +24,15 @@ export default function App() {
   const [queryInput, setQueryInput] = useState('')
   const [filters, setFilters] = useState({})
 
-  const { loading, error, data } = useQuery(SEARCH_FOOD_QUERY, { variables: { query: queryInput, filters } });
+  const [sortOrder, setSortOrder] = useState({ field: null, direction: 'ASC' });
 
+  const { loading, error, data } = useQuery(SEARCH_FOOD_QUERY, { variables: { query: queryInput, filters, sortOrder } });
 
+  const onHeaderClick = (headerKey) => {
+    const getOppositeSortDirection = (currentDirection) => currentDirection === 'ASC' ? 'DESC' : 'ASC';
+    setSortOrder((prevState) => ({ field: headerKey, direction: getOppositeSortDirection(prevState.direction) }))
+
+  }
   // if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -59,7 +65,8 @@ export default function App() {
                         <tr>
                           <th
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                            onClick={() => onHeaderClick('id')}
                             >
                             Id
                           </th>

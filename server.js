@@ -81,8 +81,8 @@ const root = {
     }
 
     const sortData = {
-      "sortBy": sortFieldEnumMapping[arg.sortOrder?.field],
-      "sortOrder": sortDirectionEnumMapping[arg.sortOrder?.direction]
+      "sortBy": sortFieldEnumMapping[arg.sortOrder?.field] || sortFieldEnumMapping.id,
+      "sortOrder": sortDirectionEnumMapping[arg.sortOrder?.direction] || sortDirectionEnumMapping.ASC
     }
 
     const dataTypeEnumMapping = {
