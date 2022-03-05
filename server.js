@@ -124,7 +124,7 @@ const root = {
           // add adapter
           id: e.fdcId,
           dataType: e.dataType,
-          publishedDate: new Date(e.publishedDate).toISOString(),
+          publishedDate: e.publishedDate,
           description: e.description,
           foodCategory: e.foodCategory,
           brandOwner: e.brandOwner,

@@ -8,8 +8,8 @@ const brandOwnerFilterConfig = {
     { value: 'coca-cola', label: 'Coca-Cola' },
     { value: 'danone', label: 'Danone' },
     { value: 'pepsi', label: 'Pepsi' },
-    { value: 'CHILI BEAK', label: 'CHILI BEAK' },
-    { value: 'Kar Nut Products Company', label: `Kar Nut Products Company` },
+    { value: 'McDonalds', label: 'McDonalds ' },
+    { value: 'FRESH & EASY', label: `FRESH & EASY` },
   ],
 }
 const dataTypeFilterConfig = {

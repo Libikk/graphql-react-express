@@ -34,9 +34,9 @@ export default function App() {
           <div className='p-20 flex'>
             <Filters onFiltersChanged={setFilters} />
             <div className="flex flex-col px-10">
-              <div className='bg-white'>
-                <div className="w-full sm:max-w-xs px-10 flex">
-                  <label htmlFor="query">
+              <div className='bg-white py-5'>
+                <div className="w-full sm:max-w-xs px-10 flex items-center">
+                  <label htmlFor="query" className='font-medium mr-4'>
                     Query
                   </label>
                   <input
@@ -46,7 +46,7 @@ export default function App() {
                     id="query"
                     value={queryInput}
                     onChange={({ target }) => setQueryInput(target.value)}
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md  px-4 py-2"
+                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 border rounded-md  px-4 py-2"
                     placeholder="Type food query"
                     />
                 </div>
@@ -99,11 +99,11 @@ export default function App() {
                         {data?.searchFoods.foods.map((food) => (
                           <tr key={food.id}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{food.id}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.description}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-w-xl overflow-hidden">{food.description}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.marketCountry}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.brandOwner}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.dataType}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.publishedDate}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.publishedDate && food.publishedDate}</td>
                           </tr>
                         ))}
                       </tbody>
