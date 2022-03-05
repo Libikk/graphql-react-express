@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 const filters = [
   {
+
+    // todo brandowner can only be singular value :<
     key: 'brandOwner',
     name: 'Brand Owner',
     options: [
