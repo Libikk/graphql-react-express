@@ -23,5 +23,5 @@ Example:
 2. Select filter `Pepsi` in the Brand Owner section
 3. That will display all of the Pepsi products related to cherry flavour
 
-![your-pic-caption-name](./asset/demo-screenshot.jpg)
+![your-pic-caption-name](./assets/demo-screenshot.jpg)
 
