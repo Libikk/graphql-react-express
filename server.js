@@ -4,65 +4,61 @@ const express = require("express");
 const cors = require("cors");
 const fetch = require('node-fetch');
 const app = express();
-const API_KEY = 'yyrMO7Qv3IbCG81yxhMBin9L9DGue4B0iUGNjWPl'
+const API_KEY = process.env.API_KEY || 'yyrMO7Qv3IbCG81yxhMBin9L9DGue4B0iUGNjWPl';
 const { searchFoodAdapterData } = require('./src/adapters/searchFoodApiAdapter');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/test", (req, res, next) => {
-
-});
-
 const schema = buildSchema(`
-type Food {
-  id: Int!
-  dataType: String
-  publishedDate: String
-  description: String
-  marketCountry: String
-  brandOwner: String
-  foodCategory: String
-}
+  type Food {
+    id: Int!
+    dataType: String
+    publishedDate: String
+    description: String
+    marketCountry: String
+    brandOwner: String
+    foodCategory: String
+  }
 
-type SearchFoods {
-  foods: [Food]
-  totalPages: Int!
-  currentPage: Int!
-}
+  type SearchFoods {
+    foods: [Food]
+    totalPages: Int!
+    currentPage: Int!
+  }
 
-enum SortDirectionEnum {
-  ASC
-  DESC
-}
+  enum SortDirectionEnum {
+    ASC
+    DESC
+  }
 
-enum SortFieldEnum {
-  dataType
-  description
-  publishedDate
-  id
-}
+  enum SortFieldEnum {
+    dataType
+    description
+    publishedDate
+    id
+  }
 
-enum DataTypeFilterEnum {
-  Branded
-  Foundation
-  Survey
-  SRLegacy
-}
+  enum DataTypeFilterEnum {
+    Branded
+    Foundation
+    Survey
+    SRLegacy
+  }
 
-input SortOrder {
-  field: SortFieldEnum
-  direction: SortDirectionEnum
-}
+  input SortOrder {
+    field: SortFieldEnum
+    direction: SortDirectionEnum
+  }
 
-input Filters {
-  dataType: [DataTypeFilterEnum]
-  brandOwner: String
-}
+  input Filters {
+    dataType: [DataTypeFilterEnum]
+    brandOwner: String
+  }
 
-type Query {
-  searchFoods(sortOrder: SortOrder, query: String, filters: Filters): SearchFoods
-}
+  type Query {
+    searchFoods(sortOrder: SortOrder, query: String, filters: Filters): SearchFoods
+  }
 `);
 
 const root = {
