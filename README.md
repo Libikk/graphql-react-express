@@ -17,6 +17,11 @@ Then go to http://localhost:3000 to play with the UI.
 
 Once its up and running, UI allow us to type the query to search particular food with additional filters and sort options.
 
+Additional features:
+- Filters
+- Query Input
+- Sorting
+
 Example:
 
 1. Type `cherry` in Query input
