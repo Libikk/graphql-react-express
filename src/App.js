@@ -19,6 +19,15 @@ query searchFoods($query: String, $filters: Filters, $sortOrder: SortOrder) {
   }
 }
 `;
+
+const tableColumnKeys = [
+  { key: 'id', label: 'Id', isSortable: true },
+  { key: 'description', label: 'Description', isSortable: true },
+  { key: 'marketCountry', label: 'Market Country' },
+  { key: 'brandOwner', label: 'Brand Owner' },
+  { key: 'dataType', label: 'Data Type', isSortable: true },
+  { key: 'publishedDate', label: 'Published Date', isSortable: true },
+]
 export default function App() {
 
   const [queryInput, setQueryInput] = useState('')
@@ -28,11 +37,15 @@ export default function App() {
 
   const { loading, error, data } = useQuery(SEARCH_FOOD_QUERY, { variables: { query: queryInput, filters, sortOrder } });
 
-  const onHeaderClick = (headerKey) => {
+  const triggerColumnSort = (headerKey) => {
     const getOppositeSortDirection = (currentDirection) => currentDirection === 'ASC' ? 'DESC' : 'ASC';
-    setSortOrder((prevState) => ({ field: headerKey, direction: getOppositeSortDirection(prevState.direction) }))
-
+    setSortOrder((prevState) => ({ field: headerKey, direction: getOppositeSortDirection(prevState.direction) }));
   }
+
+  const onHeaderClick = (headerKey) => {
+    triggerColumnSort(headerKey);
+  }
+
   // if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -63,54 +76,25 @@ export default function App() {
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
+                          {tableColumnKeys.map(colData =>
                           <th
+                            key={colData.key}
                             scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                            onClick={() => onHeaderClick('id')}
+                            className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${colData.isSortable && 'cursor-pointer hover:opacity-75'}`}
+                            onClick={() => colData.isSortable && onHeaderClick(colData.key)}
                             >
-                            Id
+                              <div className='flex'>
+                                <span>{colData.label}</span>
+                                {colData.isSortable && <img alt='sort-icon' src="https://img.icons8.com/ios-glyphs/30/000000/sort.png" className='w-3 h-3' />}
+                              </div>
                           </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                            Description
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                            Market Country
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                            Brand Owner
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                            Data Type
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                            Published Date
-                          </th>
+                          )}
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {data?.searchFoods.foods.map((food) => (
                           <tr key={food.id}>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{food.id}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-w-xl overflow-hidden">{food.description}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.marketCountry}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.brandOwner}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.dataType}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{food.publishedDate && food.publishedDate}</td>
+                            {tableColumnKeys.map(colData => <td key={colData.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{food[colData.key]}</td>)}
                           </tr>
                         ))}
                       </tbody>
