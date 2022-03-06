@@ -5,7 +5,7 @@ const cors = require("cors");
 const fetch = require('node-fetch');
 const app = express();
 const API_KEY = 'yyrMO7Qv3IbCG81yxhMBin9L9DGue4B0iUGNjWPl'
-
+const { searchFoodAdapterData } = require('./src/adapters/searchFoodApiAdapter');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -103,7 +103,6 @@ const root = {
         ...filters,
         ...sortData,
       }
-      console.log('🚀 ~ file: server.js ~ line 105 ~ searchFoods: ~ body', body);
 
       const options = {
         method: 'POST',
@@ -115,22 +114,8 @@ const root = {
 
       const response = await fetch(`https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${API_KEY}`, options);
       const data = await response.json();
+      return searchFoodAdapterData(data);
 
-
-      return {
-        totalPages: data.totalPages,
-        currentPage: data.currentPage,
-        foods: data.foods.map(e => ({
-          // add adapter
-          id: e.fdcId,
-          dataType: e.dataType,
-          publishedDate: e.publishedDate,
-          description: e.description,
-          foodCategory: e.foodCategory,
-          brandOwner: e.brandOwner,
-          marketCountry: e.marketCountry
-        }))
-      }
     } catch (err) {
       console.error(err);
     }
